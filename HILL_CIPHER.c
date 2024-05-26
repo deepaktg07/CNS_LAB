@@ -1,57 +1,64 @@
 #include <stdio.h>
 #include <string.h>
-#include <math.h>
 
-#define M 10
+#define MAX 100
 
-int det(int a, int b, int c, int d) { 
-    return a * d - b * c; 
-}
+void encrypt(char message[], int keyMatrix[3][3], int size) {
+    int i, j, k, messageVector[3] = {0}, cipherMatrix[3] = {0};
+    int len = strlen(message);
+    
+    printf("Encrypted message: ");
+    for (i = 0; i < len; i += size) {
+        for (j = 0; j < size; j++) {
+            messageVector[j] = message[i + j] - 'A';
+        }
 
-int inv(int a, int m) {
-    for (int i = 1; i < m; i++)
-        if ((a * i) % m == 1)
-            return i;
-    return -1;
-}
+        for (j = 0; j < size; j++) {
+            cipherMatrix[j] = 0;
+            for (k = 0; k < size; k++) {
+                cipherMatrix[j] += keyMatrix[j][k] * messageVector[k];
+            }
+            cipherMatrix[j] = cipherMatrix[j] % 26;
+        }
 
-void enc(char m[], int k[][M], int s) {
-    int l = strlen(m), p = ceil(l / (float) s) * s, a[p], e[p], i, j, t;
-    for (i = 0; i < l; i++) 
-        a[i] = m[i] - 'A';
-    for (; i < p; i++) 
-        a[i] = 23;
-    for (i = 0; i < p; i += s) {
-        for (j = 0; j < s; j++) {
-            t = 0;
-            for (int x = 0; x < s; x++) 
-                t += k[j][x] * a[i + x]; 
-            e[i + j] = t % 26;
+        for (j = 0; j < size; j++) {
+            printf("%c", cipherMatrix[j] + 'A');
         }
     }
-    printf("Encrypted message: ");
-    for (i = 0; i < p; i++) 
-        printf("%c", (char) (e[i] + 'A'));
     printf("\n");
 }
 
 int main() {
-    int s, k[M][M], i, j;
-    char m[1000];
-    printf("Enter key size (max 10): ");
-    scanf("%d", &s);
-    printf("Enter key matrix elements:\n");
-    for (i = 0; i < s; i++) {
-        for (j = 0; j < s; j++) {
-            scanf("%d", &k[i][j]);
-        }
-    }
-    if (det(k[0][0], k[0][1], k[1][0], k[1][1]) == 0) {
-        printf("Key matrix is not invertible. Please enter a valid key matrix.\n");
+    char message[MAX];
+    int keyMatrix[3][3], size, i, j;
+
+    printf("Enter the size of the key matrix (2 or 3): ");
+    scanf("%d", &size);
+
+    if (size != 2 && size != 3) {
+        printf("Invalid key size. Only 2x2 and 3x3 key matrices are supported.\n");
         return 1;
     }
-    printf("Enter message to encrypt (uppercase only): ");
-    scanf("%s", m);
-    enc(m, k, s);
+
+    printf("Enter the elements of the %dx%d key matrix:\n", size, size);
+    for (i = 0; i < size; i++) {
+        for (j = 0; j < size; j++) {
+            scanf("%d", &keyMatrix[i][j]);
+        }
+    }
+
+    printf("Enter the message to be encrypted (uppercase letters only): ");
+    scanf("%s", message);
+
+    // Pad the message with 'X' if necessary
+    int len = strlen(message);
+    while (len % size != 0) {
+        message[len] = 'X';
+        len++;
+    }
+    message[len] = '\0';
+
+    encrypt(message, keyMatrix, size);
+
     return 0;
 }
