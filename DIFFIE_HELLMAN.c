@@ -1,21 +1,21 @@
 #include <math.h>
 #include <stdio.h>
 
-long long int power(long long int a, long long int b, long long int P) {
+long long int power(long long int a, long long int b, long long int p) {
     if (b == 1)
-        return a % P;
+        return a % p;
     else
-        return ((long long int)pow(a, b) % P);
+        return ((long long int)pow(a, b) % p);
 }
 
 int main() {
-    long long int P, G, x, a, y, b, ka, kb;
+    long long int p, g, x, a, y, b, ka, kb;
 
-    printf("Enter the value of P (Prime Number): ");
-    scanf("%lld", &P);
+    printf("Enter the value of p (Prime Number): ");
+    scanf("%lld", &p);
 
-    printf("Enter the value of G (A generator of P): ");
-    scanf("%lld", &G);
+    printf("Enter the value of g (A generator of p): ");
+    scanf("%lld", &g);
 
     printf("Enter the value of a private key for Alice: ");
     scanf("%lld", &a);
@@ -23,11 +23,11 @@ int main() {
     printf("Enter the value of a private key for Bob: ");
     scanf("%lld", &b);
 
-    x = power(G, a, P);
-    y = power(G, b, P);
+    x = power(g, a, p);
+    y = power(g, b, p);
 
-    ka = power(y, a, P);
-    kb = power(x, b, P);
+    ka = power(y, a, p);
+    kb = power(x, b, p);
 
     printf("Secret key for Alice is : %lld\n", ka);
     printf("Secret key for Bob is : %lld\n", kb);
