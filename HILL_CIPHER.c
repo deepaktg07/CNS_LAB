@@ -3,18 +3,14 @@
 
 #define MAX 100
 
-void encrypt(char message[], int keyMatrix[2][2], int size) {
-    int i, j, k, messageVector[2] = {0}, cipherMatrix[2] = {0};
+void encrypt(char message[], int keyMatrix[3][3], int size) {
+    int i, j, k, messageVector[3] = {0}, cipherMatrix[3] = {0};
     int len = strlen(message);
     
     printf("Encrypted message: ");
     for (i = 0; i < len; i += size) {
         for (j = 0; j < size; j++) {
-            if (message[i + j] == ' ') {
-                messageVector[j] = 0; // Handle spaces
-            } else {
-                messageVector[j] = message[i + j] - 'A';
-            }
+            messageVector[j] = message[i + j] - 'A';
         }
 
         for (j = 0; j < size; j++) {
@@ -26,11 +22,7 @@ void encrypt(char message[], int keyMatrix[2][2], int size) {
         }
 
         for (j = 0; j < size; j++) {
-            if (message[i + j] == ' ') {
-                printf(" ");
-            } else {
-                printf("%c", cipherMatrix[j] + 'A');
-            }
+            printf("%c", cipherMatrix[j] + 'A');
         }
     }
     printf("\n");
@@ -38,7 +30,7 @@ void encrypt(char message[], int keyMatrix[2][2], int size) {
 
 int main() {
     char message[MAX];
-    int keyMatrix[2][2], size, i, j;
+    int keyMatrix[3][3], size, i, j;
 
     printf("Enter the size of the key matrix (2 or 3): ");
     scanf("%d", &size);
@@ -55,26 +47,18 @@ int main() {
         }
     }
 
-    printf("Enter the message to be encrypted (uppercase letters and spaces): ");
-    scanf(" %[^\n]", message);  // Read entire line including spaces
+    printf("Enter the message to be encrypted (uppercase letters only): ");
+    scanf("%s", message);
 
-    // Remove spaces and handle padding
+    // Pad the message with 'X' if necessary
     int len = strlen(message);
-    char paddedMessage[MAX];
-    int pos = 0;
-
-    for (i = 0; i < len; i++) {
-        if (message[i] != ' ') {
-            paddedMessage[pos++] = message[i];
-        }
+    while (len % size != 0) {
+        message[len] = 'X';
+        len++;
     }
-    
-    while (pos % size != 0) {
-        paddedMessage[pos++] = 'X';
-    }
-    paddedMessage[pos] = '\0';
+    message[len] = '\0';
 
-    encrypt(paddedMessage, keyMatrix, size);
+    encrypt(message, keyMatrix, size);
 
     return 0;
 }
