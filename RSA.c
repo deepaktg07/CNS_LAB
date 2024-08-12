@@ -1,8 +1,9 @@
 #include <stdio.h>
 
 long long int gcd(long long int a, long long int b) {
-    while (b) {
-        long long int temp = a % b;
+    long long int temp;
+    while (b != 0) {
+        temp = a % b;
         a = b;
         b = temp;
     }
@@ -21,18 +22,20 @@ long long int modInverse(long long int e, long long int phi) {
         x0 = x1 - q * x0;
         x1 = t;
     }
-    return x1 < 0 ? x1 + m0 : x1;
+    if (x1 < 0) x1 += m0;
+    return x1;
 }
 
 long long int power(long long int base, long long int exp, long long int modulus) {
     long long int result = 1;
     while (exp > 0) {
-        if (exp % 2) result = (result * base) % modulus;
+        if (exp % 2 != 0) result = (result * base) % modulus;
         base = (base * base) % modulus;
         exp /= 2;
     }
     return result;
 }
+
 int main() {
     long long int p, q, e, n, phi, d, plaintext, ciphertext, decryptedtext;
     
