@@ -11,12 +11,14 @@ long long int findD(long long int e, long long int phi) {
     return -1; // Indicates no valid d found
 }
 
-long long int power(long long int base, long long int exp, long long int modulus) {
+long long int power(long long int base, long long int expo, long long int modulus) {
     long long int result = 1;
-    while (exp > 0) {
-        if (exp % 2 != 0) result = (result * base) % modulus;
+    while (expo > 0) {
+        if (expo % 2 != 0) {
+            result = (result * base) % modulus;
+        }
         base = (base * base) % modulus;
-        exp /= 2;
+        expo /= 2;
     }
     return result;
 }
