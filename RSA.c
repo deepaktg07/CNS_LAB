@@ -10,20 +10,15 @@ long long int gcd(long long int a, long long int b) {
     return a;
 }
 
-long long int modInverse(long long int e, long long int phi) {
-    long long int t, q, x0 = 0, x1 = 1, m0 = phi;
-    if (phi == 1) return 0;
-    while (e > 1) {
-        q = e / phi;
-        t = phi;
-        phi = e % phi;
-        e = t;
-        t = x0;
-        x0 = x1 - q * x0;
-        x1 = t;
+// Function to find d such that (e * d) % phi = 1
+long long int findD(long long int e, long long int phi) {
+    long long int d;
+    for (d = 1; d < phi; d++) {
+        if ((e * d) % phi == 1) {
+            return d;
+        }
     }
-    if (x1 < 0) x1 += m0;
-    return x1;
+    return -1; // Indicates no valid d found
 }
 
 long long int power(long long int base, long long int exp, long long int modulus) {
@@ -48,7 +43,14 @@ int main() {
     
     n = p * q;
     phi = (p - 1) * (q - 1);
-    d = modInverse(e, phi);
+    d = findD(e, phi);
+
+    if (d == -1) {
+        printf("No valid d found.\n");
+        return 1;
+    }
+
+    printf("The value of d is: %lld\n", d);
 
     printf("Enter plaintext: ");
     scanf("%lld", &plaintext);
