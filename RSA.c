@@ -1,15 +1,5 @@
 #include <stdio.h>
 
-long long int gcd(long long int a, long long int b) {
-    long long int temp;
-    while (b != 0) {
-        temp = a % b;
-        a = b;
-        b = temp;
-    }
-    return a;
-}
-
 // Function to find d such that (e * d) % phi = 1
 long long int findD(long long int e, long long int phi) {
     long long int d;
